@@ -1,2 +1,14 @@
+# code editor
+.vscode
+
+# lib
 node_modules/
+yarn.lock
+prisma/migrations
+
+# build
 dist/
+
+# env
+.env
+.env.prod

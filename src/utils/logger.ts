@@ -1,4 +1,4 @@
-const configLogger = {
+export const logger = {
     development: {
         transport: {
             target: 'pino-pretty',
@@ -11,5 +11,3 @@ const configLogger = {
     production: true,
     test: false,
 };
-
-export default configLogger;

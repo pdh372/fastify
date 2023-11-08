@@ -12,12 +12,21 @@
       "@src/*": [
         "*"
       ],
-      "@utils/*": [
-        "utils/*"
+      "@constants/*": [
+        "constants/*"
+      ],
+      "@constants": [
+        "constants"
       ],
       "@interfaces/*": [
         "interfaces/*"
-      ]
+      ],
+      "@utils/*": [
+        "utils/*"
+      ],
+      "@utils": [
+        "utils"
+      ],
     }
   },
   "include": [

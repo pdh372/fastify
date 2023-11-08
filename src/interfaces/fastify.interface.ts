@@ -1,6 +1,5 @@
 import { FastifyReply } from 'fastify';
 import 'fastify';
-import { MongodbCollection } from 'models';
 
 interface IError {
     field_name?: string;

@@ -4,6 +4,7 @@
 export {};
 
 declare global {
+    // @utils
     type ConstValue<T> = T extends Record<string | number | symbol, infer U> ? U : never;
     type ConstKey<T> = T extends Record<string | number | symbol, any> ? keyof T : never;
     type TypeMapObject<Properties extends string, TypeValue> = {
