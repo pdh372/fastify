@@ -1,5 +1,19 @@
-# npx prisma generate --schema=./prisma/schema.prisma
+# DEVELOPMENT
 
-# npx prisma migrate dev --dotenv .env.development
+### `Step 1`:
 
-# docker-compose up -d
+```bash
+yarn install
+```
+
+### `Step 2`:
+
+```bash
+yarn prisma
+```
+
+### `Step 3`:
+
+```bash
+yarn dev
+```

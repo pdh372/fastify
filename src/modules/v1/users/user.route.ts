@@ -5,13 +5,21 @@ const publicRoutes: ICustomRoute[] = [
     {
         path: '/dsa',
         method: 'get',
-        middlewares: [],
-        handler: () => {},
+        handler: (req, reply) => {
+            reply.ok({ value: '', otherValue: false });
+        },
+        schema: {
+            querystring: {},
+            // response: {
+            //     200: {
+            //         type: 'object',
+            //     },
+            // },
+        },
     },
     {
         path: '/:id/12',
         method: 'get',
-        middlewares: [],
         handler: () => {},
     },
 ];
@@ -20,14 +28,16 @@ const authRoutes: ICustomRoute[] = [
     {
         path: '/fas',
         method: 'get',
-        middlewares: [],
-        handler: () => {},
+        handler: function (req, reply) {
+            return reply.ok([]);
+        },
     },
     {
         path: '/:id',
         method: 'delete',
-        middlewares: [],
-        handler: () => {},
+        handler: (req, reply) => {
+            reply.ok();
+        },
     },
 ];
 

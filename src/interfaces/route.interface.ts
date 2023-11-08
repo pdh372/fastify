@@ -1,14 +1,12 @@
-import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
-
-export interface IMiddleware {
-    (req: FastifyRequest, reply?: FastifyReply, done?: HookHandlerDoneFunction): void;
-}
+import { preHandlerHookHandler, RouteHandlerMethod, preSerializationHookHandler, FastifySchema } from 'fastify';
 
 export interface ICustomRoute {
     method: 'put' | 'post' | 'get' | 'delete' | 'patch';
     path: string;
-    handler: IMiddleware;
-    middlewares: IMiddleware[];
+    handler: RouteHandlerMethod;
+    schema?: FastifySchema;
+    preHandler?: preHandlerHookHandler;
+    preSerialization?: preSerializationHookHandler;
 }
 
 export interface IRouters {

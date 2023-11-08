@@ -26,7 +26,14 @@ const pathRoutes = ({
                         );
                 }
 
-                fastify[item.method](item.path, item.handler);
+                fastify.route({
+                    url: `/api/${version}/${rootPath}${item.path}` as string,
+                    method: item.method,
+                    handler: item.handler,
+                    preSerialization: item.preSerialization,
+                    preHandler: item.preHandler,
+                    schema: item.schema,
+                });
             });
 
             publicRoutes.forEach(item => {
@@ -40,7 +47,14 @@ const pathRoutes = ({
                     );
                 }
 
-                fastify[item.method](item.path, item.handler);
+                fastify.route({
+                    url: `/api/${version}/${rootPath}${item.path}`,
+                    method: item.method,
+                    handler: item.handler,
+                    preSerialization: item.preSerialization,
+                    preHandler: item.preHandler,
+                    schema: item.schema,
+                });
             });
 
             done();
@@ -87,9 +101,19 @@ const handleRoutes = async () => {
     ).filter(item => item.routes);
 
     routeHandlers.forEach(handler => {
-        fastify.register(handler.routes({ rootPath: handler.rootPath, version: handler.version }), {
-            prefix: `api/${handler.version}`,
-        });
+        fastify.register(handler.routes({ rootPath: handler.rootPath, version: handler.version }));
+    });
+
+    fastify.get('/favicon.ico', (req, reply) => {
+        reply.ok();
+    });
+
+    fastify.get('/', (req, reply) => {
+        reply.ok(null, { message: 'Healthy check.' });
+    });
+
+    fastify.get('*', (req, reply) => {
+        reply.notFound(null, { message: 'Api not found.' });
     });
 };
 
