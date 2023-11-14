@@ -24,14 +24,8 @@
     },
     "scripts": {
         "prisma": "npx prisma generate --schema=./prisma/postgres.prisma && npx prisma migrate dev --schema=./prisma/postgres.prisma",
-        "build": "rm -rf ./dist && tsc",
-        "start": "cp .env.production .env && NODE_ENV=production && node -r tsconfig-paths/register dist/app.js",
-        "dev": "cp .env.development .env && NODE_ENV=development && nodemon -r tsconfig-paths/register src/app.ts"
-    },
-    "_moduleAliases": {
-        "@src": "dist",
-        "@constants": "dist/constants",
-        "@utils": "dist/utils",
-        "@interfaces": "dist/interfaces"
+        "build": "rm -rf ./dist && tsc && tsc-alias",
+        "start": "cp .env.production .env && node -r tsconfig-paths/register dist/app.js",
+        "dev": "cp .env.development .env && nodemon -r tsconfig-paths/register src/app.ts"
     }
 }

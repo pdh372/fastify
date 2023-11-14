@@ -41,7 +41,6 @@ const main = async () => {
                 preHandler: undefined,
                 preSerialization: (request, reply, payload, done) => {
                     const newPayload = payload as any;
-                    console.info(newPayload, typeof newPayload);
                     done(null, { ...newPayload, data: newPayload.data.toUpperCase() });
                 },
             });

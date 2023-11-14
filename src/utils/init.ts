@@ -2,7 +2,7 @@ import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { ICustomRoute } from '@src/interfaces/route.interface';
 import { fastify, config, helper } from '@utils';
 import { garbage } from '@constants';
-import path, { dirname } from 'path';
+import path from 'path';
 import fs from 'fs/promises';
 
 const pathRoutes = ({
@@ -16,14 +16,13 @@ const pathRoutes = ({
         return (fastify: FastifyInstance, opts: FastifyPluginOptions, done: (err?: Error | undefined) => void) => {
             authRoutes.forEach(item => {
                 if (config.log.route) {
-                    config.log.route &&
-                        fastify.log.info(
-                            `AUTH:: [${helper.padEnd({
-                                base: item.method,
-                                size: 6,
-                                prefix: ' ',
-                            })}] - /api/${version}/${rootPath}${item.path}`,
-                        );
+                    fastify.log.info(
+                        `AUTH:: [${helper.padEnd({
+                            base: item.method,
+                            size: 6,
+                            prefix: ' ',
+                        })}] - /api/${version}/${rootPath}${item.path}`,
+                    );
                 }
 
                 fastify.route({
@@ -70,12 +69,18 @@ const handleRoutes = async () => {
         await Promise.all(
             versions.map(async version => {
                 const rootRoutes = (await fs.readdir(path.join(pathModules, version))).filter(garbage.filter);
-                const routesFormatted = rootRoutes.map(router => {
-                    const extension = config.isBuilded ? 'js' : 'ts';
-                    const routeFile = `${router.replace(/s$/, '')}.route.${extension}`;
+                const routesFormatted = rootRoutes.map(rootPath => {
+                    if (config.isBuilded) {
+                        const routeFile = `${rootPath.replace(/e?s$/, '')}.route.js`;
+                        var route = path.join(__dirname, '..', 'modules', version, rootPath, routeFile);
+                    } else {
+                        const routeFile = `${rootPath.replace(/e?s$/, '')}.route.ts`;
+                        var route = path.join('modules', version, rootPath, routeFile);
+                    }
+
                     return {
-                        route: path.join(__dirname, '..', 'modules', version, router, routeFile),
-                        rootPath: router,
+                        route,
+                        rootPath,
                     };
                 });
 

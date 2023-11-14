@@ -1,3 +1,4 @@
+import { fastify } from './fastify';
 import path from 'path';
 require('dotenv').config({ path: path.join(__dirname, '../../', `.env`) });
 
@@ -9,6 +10,8 @@ const ENV = {
 };
 
 const env = process.env.NODE_ENV || ENV.DEV;
+console.log(`\n`);
+fastify.log.info(`ENV :: 🚀🚀🚀 ${env} 🚀🚀🚀\n`);
 
 export const config = {
     port: +(process.env.PORT || 3000),

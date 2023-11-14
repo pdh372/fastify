@@ -10,7 +10,7 @@ yarn install
 
 ```bash
 # Before run cmd below
-# Please create .env file then add environment variable
+# Please create .env.development file then add environment variable
 # You can see example from .env.example
 
 yarn prisma
