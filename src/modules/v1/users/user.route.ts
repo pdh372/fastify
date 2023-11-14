@@ -1,5 +1,5 @@
 import { ICustomRoute } from '@src/interfaces/route.interface';
-import { init } from '@utils';
+import { helper, init } from '@utils';
 
 const publicRoutes: ICustomRoute[] = [
     {
@@ -41,4 +41,4 @@ const authRoutes: ICustomRoute[] = [
     },
 ];
 
-export = { routes: init.pathRoutes({ authRoutes, publicRoutes }) };
+export = { routes: helper.dynamicImportRouter({ authRoutes, publicRoutes }) };

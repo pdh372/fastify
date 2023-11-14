@@ -1,74 +1,18 @@
-import { FastifyInstance, FastifyPluginOptions } from 'fastify';
-import { ICustomRoute } from '@src/interfaces/route.interface';
 import { fastify, config, helper } from '@utils';
 import { garbage } from '@constants';
 import path from 'path';
 import fs from 'fs/promises';
+import fastifySwagger from '@fastify/swagger';
+import fastifySwaggerUi from '@fastify/swagger-ui';
 
-const pathRoutes = ({
-    authRoutes = [],
-    publicRoutes = [],
-}: {
-    authRoutes: ICustomRoute[];
-    publicRoutes: ICustomRoute[];
-}) => {
-    return ({ rootPath, version }: { rootPath: string; version: string }) => {
-        return (fastify: FastifyInstance, opts: FastifyPluginOptions, done: (err?: Error | undefined) => void) => {
-            authRoutes.forEach(item => {
-                if (config.log.route) {
-                    fastify.log.info(
-                        `AUTH:: [${helper.padEnd({
-                            base: item.method,
-                            size: 6,
-                            prefix: ' ',
-                        })}] - /api/${version}/${rootPath}${item.path}`,
-                    );
-                }
-
-                fastify.route({
-                    url: `/api/${version}/${rootPath}${item.path}` as string,
-                    method: item.method,
-                    handler: item.handler,
-                    preSerialization: item.preSerialization,
-                    preHandler: item.preHandler,
-                    schema: item.schema,
-                });
-            });
-
-            publicRoutes.forEach(item => {
-                if (config.log.route) {
-                    fastify.log.info(
-                        `PUBL:: [${helper.padEnd({
-                            base: item.method,
-                            size: 6,
-                            prefix: ' ',
-                        })}] - /api/${version}/${rootPath}${item.path}`,
-                    );
-                }
-
-                fastify.route({
-                    url: `/api/${version}/${rootPath}${item.path}`,
-                    method: item.method,
-                    handler: item.handler,
-                    preSerialization: item.preSerialization,
-                    preHandler: item.preHandler,
-                    schema: item.schema,
-                });
-            });
-
-            done();
-        };
-    };
-};
-
-const handleRoutes = async () => {
+const routes = async () => {
     const pathModules = path.join(__dirname, '..', 'modules');
-    const versions = (await fs.readdir(pathModules)).filter(garbage.filter);
+    const versions = (await fs.readdir(pathModules)).filter(garbage.filtered);
 
     const routes = (
         await Promise.all(
             versions.map(async version => {
-                const rootRoutes = (await fs.readdir(path.join(pathModules, version))).filter(garbage.filter);
+                const rootRoutes = (await fs.readdir(path.join(pathModules, version))).filter(garbage.filtered);
                 const routesFormatted = rootRoutes.map(rootPath => {
                     if (config.isBuilded) {
                         const routeFile = `${rootPath.replace(/e?s$/, '')}.route.js`;
@@ -97,7 +41,7 @@ const handleRoutes = async () => {
         await Promise.all(
             routes.map(async r => {
                 return {
-                    routes: (await helper.dynamicImport(r.route))?.routes,
+                    routes: (await helper.dynamicImportFile(r.route))?.routes,
                     version: r.version,
                     rootPath: r.rootPath,
                 };
@@ -122,4 +66,29 @@ const handleRoutes = async () => {
     });
 };
 
-export const init = { pathRoutes, handleRoutes };
+const document = async () => {
+    const swaggerOptions = {
+        swagger: {
+            info: {
+                title: 'My Title',
+                description: 'My Description.',
+                version: '1.0.0',
+            },
+            host: 'localhost',
+            schemes: ['http', 'https'],
+            consumes: ['application/json'],
+            produces: ['application/json'],
+            tags: [{ name: 'Default', description: 'Default' }],
+        },
+    };
+
+    const swaggerUiOptions = {
+        routePrefix: '/docs',
+        exposeRoute: true,
+    };
+
+    fastify.register(fastifySwagger, swaggerOptions);
+    fastify.register(fastifySwaggerUi, swaggerUiOptions);
+};
+
+export const init = { routes, document };

@@ -1,4 +1,4 @@
-# DEVELOPMENT
+# DEVELOPMENT (Use NodeJS version 20.9.0)
 
 ### `Step 1`:
 
