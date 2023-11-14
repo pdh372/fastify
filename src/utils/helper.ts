@@ -17,7 +17,7 @@ const dynamicImport = async (dir: string) => {
     try {
         return await import(dir);
     } catch (error: any) {
-        console.error(`dynamicImport:: ${dir}`);
+        console.error(`Error dynamicImport:: ${dir} :: ${error.message}`);
         return null;
     }
 };

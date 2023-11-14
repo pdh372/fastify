@@ -1,4 +1,5 @@
-require('dotenv').config({ path: `.env` });
+import path from 'path';
+require('dotenv').config({ path: path.join(__dirname, '../../', `.env`) });
 
 const ENV = {
     DEV: 'development',
@@ -7,7 +8,7 @@ const ENV = {
     UAT: 'uat',
 };
 
-const env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || ENV.DEV;
 
 export const config = {
     port: +(process.env.PORT || 3000),
@@ -16,6 +17,8 @@ export const config = {
         isDev: ENV.DEV === env,
         isProd: ENV.PROD === env,
     },
+
+    isBuilded: process.env.IS_BUILDED === 'true',
 
     log: {
         route: process.env.IS_LOG_ROUTE === 'true',

@@ -2,7 +2,7 @@ import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { ICustomRoute } from '@src/interfaces/route.interface';
 import { fastify, config, helper } from '@utils';
 import { garbage } from '@constants';
-import path from 'path';
+import path, { dirname } from 'path';
 import fs from 'fs/promises';
 
 const pathRoutes = ({
@@ -71,10 +71,10 @@ const handleRoutes = async () => {
             versions.map(async version => {
                 const rootRoutes = (await fs.readdir(path.join(pathModules, version))).filter(garbage.filter);
                 const routesFormatted = rootRoutes.map(router => {
-                    const extension = config.env.isDev ? 'ts' : 'js';
+                    const extension = config.isBuilded ? 'js' : 'ts';
                     const routeFile = `${router.replace(/s$/, '')}.route.${extension}`;
                     return {
-                        route: path.join('modules', version, router, routeFile),
+                        route: path.join(__dirname, '..', 'modules', version, router, routeFile),
                         rootPath: router,
                     };
                 });
@@ -104,15 +104,15 @@ const handleRoutes = async () => {
         fastify.register(handler.routes({ rootPath: handler.rootPath, version: handler.version }));
     });
 
-    fastify.get('/favicon.ico', (req, reply) => {
+    fastify.get('/favicon.ico', (___, reply) => {
         reply.ok();
     });
 
-    fastify.get('/', (req, reply) => {
+    fastify.get('/', (___, reply) => {
         reply.ok(null, { message: 'Healthy check.' });
     });
 
-    fastify.get('*', (req, reply) => {
+    fastify.get('*', (___, reply) => {
         reply.notFound(null, { message: 'Api not found.' });
     });
 };

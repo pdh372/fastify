@@ -11,4 +11,5 @@ dist/
 
 # env
 .env
-.env.prod
+.env.production
+.env.development
