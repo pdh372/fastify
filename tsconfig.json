@@ -32,7 +32,8 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.json",
-    ".env"
+    ".env",
+    "src/interfaces/globals.d.ts"
   ],
   "exclude": [
     "node_modules",

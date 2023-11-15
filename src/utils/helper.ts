@@ -1,8 +1,7 @@
 import { IFormatResponse } from '@interfaces/fastify.interface';
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { ICustomRoute } from '@src/interfaces/route.interface';
-import { fastify, config } from '@utils';
-import path from 'path';
+import { config } from '@utils';
 
 const formatRes = (param: IFormatResponse) => {
     const { code, instance, data, error_message, success = false, option = {} } = param;

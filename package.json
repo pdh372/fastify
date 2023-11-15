@@ -6,7 +6,7 @@
     "scripts": {
         "prisma": "npx prisma generate --schema=./prisma/postgres.prisma && npx prisma migrate dev --schema=./prisma/postgres.prisma",
         "build": "rm -rf ./dist && tsc && tsc-alias",
-        "start": "cp .env.production .env && node -r tsconfig-paths/register dist/app.js",
+        "start": "yarn build && cp .env.production .env && node -r tsconfig-paths/register dist/app.js",
         "dev": "cp .env.development .env && nodemon -r tsconfig-paths/register src/app.ts"
     },
     "dependencies": {

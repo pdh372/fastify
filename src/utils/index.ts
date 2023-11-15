@@ -1,3 +1,4 @@
+export * from './baseResponse';
 export * from './config';
 export * from './fastify';
 export * from './helper';

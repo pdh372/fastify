@@ -1,20 +1,14 @@
 import { ICustomRoute } from '@src/interfaces/route.interface';
-import { helper, init } from '@utils';
+import { helper } from '@utils';
+import * as schemas from './user.schema';
 
 const publicRoutes: ICustomRoute[] = [
     {
         path: '/dsa',
         method: 'get',
+        schema: schemas.listUser,
         handler: (req, reply) => {
-            reply.ok({ value: '', otherValue: false });
-        },
-        schema: {
-            querystring: {},
-            // response: {
-            //     200: {
-            //         type: 'object',
-            //     },
-            // },
+            reply.ok([{ _id: '', name: '' }]);
         },
     },
     {
